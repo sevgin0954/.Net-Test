@@ -37,7 +37,7 @@ namespace Problem_3
 
 		private static void GetAllPossibleSignsRecursive(
 			int[] nums,
-			IList<string> currentSigns,
+			IList<string> currentCharacters,
 			int currentIndex,
 			int targetSum,
 			int currentSum,
@@ -48,7 +48,7 @@ namespace Problem_3
 			{
 				if (targetSum == currentSum)
 				{
-					var currentSignsAsString = string.Join(string.Empty, currentSigns);
+					var currentSignsAsString = string.Join(string.Empty, currentCharacters);
 					resultSigns.Add(currentSignsAsString);
 				}
 
@@ -57,22 +57,26 @@ namespace Problem_3
 
 			var currentNum = nums[currentIndex];
 
-			currentSigns.Add("-");
-			currentSigns.Add(currentNum.ToString());
+			AddSignWithNumber(currentCharacters, currentNum, "-");
 			var substractedSum = currentSum - currentNum;
-			GetAllPossibleSignsRecursive(nums, currentSigns, currentIndex + 1, targetSum, substractedSum, resultSigns);
-			RemoveLastNElement(currentSigns, 2);
+			GetAllPossibleSignsRecursive(nums, currentCharacters, currentIndex + 1, targetSum, substractedSum, resultSigns);
+			RemoveLastNElement(currentCharacters, 2);
 
 			var signToAdd = "+";
 			if (currentNum < 0)
 			{
 				signToAdd = "";	
 			}
-			currentSigns.Add(signToAdd);
-			currentSigns.Add(currentNum.ToString());
+			AddSignWithNumber(currentCharacters, currentNum, signToAdd);
 			var addedSum = currentSum + currentNum;
-			GetAllPossibleSignsRecursive(nums, currentSigns, currentIndex + 1, targetSum, addedSum, resultSigns);
-			RemoveLastNElement(currentSigns, 2);
+			GetAllPossibleSignsRecursive(nums, currentCharacters, currentIndex + 1, targetSum, addedSum, resultSigns);
+			RemoveLastNElement(currentCharacters, 2);
+		}
+
+		private static void AddSignWithNumber(IList<string> currentCharacters, int number, string sign)
+		{
+			currentCharacters.Add(sign);
+			currentCharacters.Add(number.ToString());
 		}
 
 		private static void RemoveLastNElement<T>(IList<T> currentSigns, int count)
